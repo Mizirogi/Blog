@@ -1,0 +1,227 @@
+<template>
+
+  <div>
+
+    <div class="table-title-box title-time-box">
+      <span>舆论数据统计</span>
+      <div>
+        <span>时间选择:</span>&#12288;
+        <el-date-picker
+          v-model="timeSelect"
+          type="daterange"
+          range-separator="至"
+          start-placeholder="2019-01-01"
+          end-placeholder="2019-12-01">
+        </el-date-picker>
+      </div>
+    </div>
+
+    <div class="dashboard-editor-container">
+    <!--<github-corner class="github-corner" />-->
+    <div class="table-title-box margin-top-2">文章数据统计</div>
+    <el-tabs v-model="activeName" style="margin-top:15px;" type="border-card">
+        <keep-alive>
+          <tab-pane />
+        </keep-alive>
+    </el-tabs>
+
+
+    <div class="table-title-box" style="margin-top: 2%">视频数据统计</div>
+    <el-tabs>
+        <keep-alive>
+          <boom-article-pane />
+        </keep-alive>
+    </el-tabs>
+
+      <el-tabs >
+        <rank-line />
+      </el-tabs>
+    <div class="table-title-box" style="margin-top: 2%">自媒体爆款内容统计</div>
+    <el-tabs >
+      <boom-bar-chart />
+    </el-tabs>
+
+    <!--<div class="table-title-box" style="margin-top: 2%">自媒体爆款视频统计</div>-->
+    <el-tabs >
+      <boom-bar-charts />
+    </el-tabs>
+
+  </div>
+
+    <div class="table-title-box title-time-box">
+      <span>舆论效果分析</span>
+      <div>
+        <span>时间选择:</span>&#12288;
+        <el-date-picker
+          v-model="timeSelect"
+          type="daterange"
+          range-separator="至"
+          start-placeholder="2019-01-01"
+          end-placeholder="2019-12-01">
+        </el-date-picker>
+        <el-select v-model="selectVal" placeholder="请选择">
+          <el-option
+            v-for="item in optionsList"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </div>
+    </div>
+
+    <div class="dashboard-editor-container">
+       <div class="table-title-box">舆论效果</div>
+        <el-tabs>
+          <keep-alive>
+            <results-table />
+          </keep-alive>
+        </el-tabs>
+
+        <el-tabs>
+          <keep-alive>
+            <article-total />
+          </keep-alive>
+       </el-tabs>
+
+      <el-tabs>
+        <keep-alive>
+          <video-total />
+        </keep-alive>
+      </el-tabs>
+
+      <el-tabs>
+        <keep-alive>
+          <hot-add-bar />
+        </keep-alive>
+      </el-tabs>
+
+      <el-tabs>
+        <keep-alive>
+          <article-add-bar />
+        </keep-alive>
+      </el-tabs>
+
+    </div>
+
+  </div>
+</template>
+
+<script>
+import tabPane from './homeTabTable'
+import boomArticlePane from  './boomArticle'
+import boomBarChart from  './BarChart'
+import boomBarCharts from  './chartBoomBar'
+import rankLine from  './rankingLine'
+import resultsTable from './resultsTable'
+import articleTotal from './articleTotalBar'
+import videoTotal from  './videoTotalBar'
+import hotAddBar from  './hotAnalysisBar'
+import articleAddBar from  './articleAnalysisBar'
+export default {
+  name: 'DashboardAdmin',
+  components: {
+    tabPane,
+    boomArticlePane,
+    boomBarChart,
+    boomBarCharts,
+    rankLine,
+    resultsTable,
+    articleTotal,
+    videoTotal,
+    hotAddBar,
+    articleAddBar
+  },
+  data() {
+    return {
+      tabMapOptions: [
+        { label: '负面', key: 'negative' },
+        { label: '正面', key: 'positive' },
+        { label: '中性', key: 'neutral' }
+      ],
+      boomOptions: [
+        { label: '昨日', key: 'lastDay' },
+        { label: '本周', key: 'nowWeek' },
+      ],
+      activeName: 'negative',
+      boomName:'nowWeek',
+      createdTimes: 0,
+      timeSelect:'',
+      optionsList: [{
+        value: '选项1',
+        label: '智跑'
+      }, {
+        value: '选项2',
+        label: '逍客'
+      }, {
+        value: '选项5',
+        label: 'RX5'
+      }],
+      selectVal: '智跑'
+    }
+  },
+  watch: {
+    activeName(val) {
+      this.$router.push(`${this.$route.path}?tab=${val}`)
+    }
+  },
+  created() {
+    // init the default selected tab
+    const tab = this.$route.query.tab;
+    if (tab) {
+      this.activeName = tab
+    }
+  },
+  methods: {
+    handleClick(tab, event) {
+      console.log(tab, event);
+    },
+    showCreatedTimes() {
+      this.createdTimes = this.createdTimes + 1
+    },
+
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.dashboard-editor-container {
+  padding: 32px;
+  background-color: rgb(240, 242, 245);
+  position: relative;
+
+  .github-corner {
+    position: absolute;
+    top: 0;
+    border: 0;
+    right: 0;
+  }
+
+  .chart-wrapper {
+    background: #fff;
+    padding: 16px 16px 0;
+    margin-bottom: 32px;
+  }
+}
+.table-title-box {
+  border-bottom: 1px solid #d9d9d9;
+  padding: 1%;
+  border-left: 3px solid lightblue;
+}
+.margin-top-2{
+  margin-top: 2%;
+}
+.title-time-box {
+  border-bottom:0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 32px;
+  background: aliceblue;
+}
+@media (max-width:1024px) {
+  .chart-wrapper {
+    padding: 8px;
+  }
+}
+</style>

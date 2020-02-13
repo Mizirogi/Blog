@@ -1,8 +1,15 @@
+/*
+ * @Description:
+ * @Author: Li
+ * @Date: 2019-11-18 13:41:40
+ * @LastEditors: Li
+ * @LastEditTime: 2019-11-30 12:06:41
+ */
 import request from '@/utils/request'
 
 export function login(data) {
   return request({
-    url: '/user/login',
+    url: '',
     method: 'post',
     data
   })
@@ -16,9 +23,10 @@ export function getInfo(token) {
   })
 }
 
-export function logout() {
+export function logout(data) {
   return request({
-    url: '/user/logout',
-    method: 'post'
+    url: '',
+    method: 'post',
+    data
   })
 }

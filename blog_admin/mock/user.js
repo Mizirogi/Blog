@@ -1,4 +1,4 @@
-
+import qs from 'qs'
 const tokens = {
   admin: {
     token: 'admin-token'
@@ -29,20 +29,24 @@ export default [
     url: '/user/login',
     type: 'post',
     response: config => {
-      const { username } = config.body
+      // console.log(config);
+      // let a = qs.parse(config.body)
+      const {username} = config.body
       const token = tokens[username]
-
+      //console.log(token);
       // mock error
-      if (!token) {
-        return {
-          code: 60204,
-          message: 'Account and password are incorrect.'
-        }
-      }
+      // if (!token) {
+      //   return {
+      //     code: 60204,
+      //     message: 'Account and password are incorrect.'
+      //   }
+      // }
 
       return {
-        code: 20000,
-        data: token
+        code: 200,
+        data: {
+          token: 'admin-token'
+        }
       }
     }
   },
@@ -64,7 +68,7 @@ export default [
       }
 
       return {
-        code: 20000,
+        code: 200,
         data: info
       }
     }
@@ -76,7 +80,7 @@ export default [
     type: 'post',
     response: _ => {
       return {
-        code: 20000,
+        code: 200,
         data: 'success'
       }
     }

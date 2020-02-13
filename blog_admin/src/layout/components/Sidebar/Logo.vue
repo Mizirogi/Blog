@@ -2,11 +2,13 @@
   <div class="sidebar-logo-container" :class="{'collapse':collapse}">
     <transition name="sidebarLogoFade">
       <router-link v-if="collapse" key="collapse" class="sidebar-logo-link" to="/">
-        <img v-if="logo" :src="logo" class="sidebar-logo">
+        <img v-if="logo" src="./popLogo3.png" class="sidebar-logo"
+             style=" width: 95%;height: 100%;object-fit: contain;">
         <h1 v-else class="sidebar-title">{{ title }} </h1>
       </router-link>
       <router-link v-else key="expand" class="sidebar-logo-link" to="/">
-        <img v-if="logo" :src="logo" class="sidebar-logo">
+        <img v-if="logo" src="./popLogo3.png" class="sidebar-logo"
+             style=" width: 95%;height: 100%;object-fit: contain;">
         <h1 class="sidebar-title">{{ title }} </h1>
       </router-link>
     </transition>
@@ -24,8 +26,8 @@ export default {
   },
   data() {
     return {
-      title: 'Vue Element Admin',
-      logo: 'https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png'
+      title: '',
+      logo: './popLogo3.png'
     }
   }
 }
@@ -40,7 +42,11 @@ export default {
 .sidebarLogoFade-leave-to {
   opacity: 0;
 }
-
+.logo-fill{
+  width: 95%;
+  height: 100%;
+  object-fit: contain;
+}
 .sidebar-logo-container {
   position: relative;
   width: 100%;

@@ -30,6 +30,10 @@ export default {
       type: Object,
       required: true
     }
+    // chartTitle: {
+    //   type: String,
+    //   required: true
+    // }
   },
   data() {
     return {
@@ -63,15 +67,18 @@ export default {
     },
     setOptions({ expectedData, actualData } = {}) {
       this.chart.setOption({
+        // title: {
+        //   text: '舆情趋势分析'
+        // },
         xAxis: {
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          data: ['11-18', '11-19', '11-20', '11-21', '11-22', '11-23', '11-24'],
           boundaryGap: false,
           axisTick: {
             show: false
           }
         },
         grid: {
-          left: 10,
+          left: 15,
           right: 10,
           bottom: 20,
           top: 30,
@@ -90,10 +97,10 @@ export default {
           }
         },
         legend: {
-          data: ['expected', 'actual']
+          data: ['负面', '正面']
         },
         series: [{
-          name: 'expected', itemStyle: {
+          name: '负面', itemStyle: {
             normal: {
               color: '#FF005A',
               lineStyle: {
@@ -109,7 +116,7 @@ export default {
           animationEasing: 'cubicInOut'
         },
         {
-          name: 'actual',
+          name: '正面',
           smooth: true,
           type: 'line',
           itemStyle: {

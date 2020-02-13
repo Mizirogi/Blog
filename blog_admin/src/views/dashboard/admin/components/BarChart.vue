@@ -47,6 +47,9 @@ export default {
       this.chart = echarts.init(this.$el, 'macarons')
 
       this.chart.setOption({
+        // title: {
+        //   text: '网络舆情状态'
+        // },
         tooltip: {
           trigger: 'axis',
           axisPointer: { // 坐标轴指示器，坐标轴触发有效
@@ -54,7 +57,7 @@ export default {
           }
         },
         grid: {
-          top: 10,
+          top: 35,
           left: '2%',
           right: '2%',
           bottom: '3%',

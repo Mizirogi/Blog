@@ -1,3 +1,10 @@
+<!--
+ * @Description:
+ * @Author: Li
+ * @Date: 2019-11-18 13:41:41
+ * @LastEditors: Li
+ * @LastEditTime: 2019-11-29 13:16:17
+ -->
 <template>
   <el-dropdown trigger="click" @command="handleSetSize">
     <div>
@@ -17,10 +24,10 @@ export default {
   data() {
     return {
       sizeOptions: [
-        { label: 'Default', value: 'default' },
-        { label: 'Medium', value: 'medium' },
-        { label: 'Small', value: 'small' },
-        { label: 'Mini', value: 'mini' }
+        { label: '默认', value: 'default' },
+        { label: '中等', value: 'medium' },
+        { label: '较小', value: 'small' },
+        { label: '迷你', value: 'mini' }
       ]
     }
   },
@@ -35,7 +42,7 @@ export default {
       this.$store.dispatch('app/setSize', size)
       this.refreshView()
       this.$message({
-        message: 'Switch Size Success',
+        message: '成功切换页面大小',
         type: 'success'
       })
     },

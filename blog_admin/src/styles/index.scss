@@ -189,3 +189,52 @@ aside {
 .multiselect--active {
   z-index: 1000 !important;
 }
+
+.text-ellipsis{
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: 80%;
+  text-align: left;
+}
+
+.text-ellipsi-two{
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: 100%;
+  text-align: left;
+}
+// main-container global css
+.app-container {
+  padding: 15px 20px 20px 20px;
+}
+
+body .el-table th.gutter{
+  display: table-cell!important;
+}
+  
+body .el-table colgroup.gutter{
+  display: table-cell!important;
+}
+
+@media screen and (-webkit-device-pixel-ratio: 0.75) {
+  .app-container {
+    padding: 15px 20px 20px 19px;
+  }
+}
+@media screen and (-webkit-device-pixel-ratio: 0.8) {
+  .app-container {
+    padding: 14px 20px 20px 19px;
+  }
+}
+@media screen and (-webkit-device-pixel-ratio: 0.9) {
+  .app-container {
+    padding: 16px 20px 20px 18px;
+  }
+}
+@media screen and (-webkit-device-pixel-ratio: 1.1) {
+  .app-container {
+    padding: 17px 20px 20px 18px;
+  }
+}

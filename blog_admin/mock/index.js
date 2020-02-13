@@ -1,3 +1,4 @@
+
 import Mock from 'mockjs'
 import { param2Obj } from '../src/utils'
 
@@ -5,12 +6,15 @@ import user from './user'
 import role from './role'
 import article from './article'
 import search from './remote-search'
+import settings from './settings'
+import qs from 'qs'
 
 const mocks = [
   ...user,
   ...role,
   ...article,
-  ...search
+  ...search,
+  ...settings
 ]
 
 // for front mock
@@ -39,7 +43,7 @@ export function mockXHR() {
         // https://expressjs.com/en/4x/api.html#req
         result = respond({
           method: type,
-          body: JSON.parse(body),
+          body: qs.parse(body),
           query: param2Obj(url)
         })
       } else {

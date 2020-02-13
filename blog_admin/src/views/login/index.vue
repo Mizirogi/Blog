@@ -1,20 +1,22 @@
 <template>
+
   <div class="login-container">
+    <div class="login-div">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on" label-position="left">
 
       <div class="title-container">
-        <h3 class="title">Login Form</h3>
+        <h3 class="title">舆情系统登录</h3>
       </div>
 
-      <el-form-item prop="username">
+      <el-form-item prop="account">
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
         <el-input
-          ref="username"
-          v-model="loginForm.username"
-          placeholder="Username"
-          name="username"
+          ref="account"
+          v-model="loginForm.account"
+          placeholder="用户名"
+          name="account"
           type="text"
           tabindex="1"
           autocomplete="on"
@@ -31,7 +33,7 @@
             ref="password"
             v-model="loginForm.password"
             :type="passwordType"
-            placeholder="Password"
+            placeholder="密码"
             name="password"
             tabindex="2"
             autocomplete="on"
@@ -45,9 +47,34 @@
         </el-form-item>
       </el-tooltip>
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
+      <!-- <el-form-item prop="vcode">
+        <span class="svg-container">
+          <svg-icon icon-class="message" />
+        </span>
+        <el-input
+          ref="vcode"
+          v-model="loginForm.vcode"
+          placeholder="验证码"
+          name="vcode"
+          type="text"
+          tabindex="3"
+        >
+          <template slot="append">
+            <div style="height: 100%;width: 100px;" @click="getCode">
+              <img ref="code" src="
+              
+             " alt="" width="100%" height="100%">
+            </div>
+          </template>
+        </el-input>
+        <span class="show-pwd" @click="getCode">
+          <i class="el-icon-refresh" />
+        </span>
+      </el-form-item> -->
 
-      <div style="position:relative">
+      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" v-throttle="{callback:handleLogin,time:3000}" >登录</el-button>
+
+      <!-- <div style="position:relative">
         <div class="tips">
           <span>Username : admin</span>
           <span>Password : any</span>
@@ -60,49 +87,48 @@
         <el-button class="thirdparty-button" type="primary" @click="showDialog=true">
           Or connect with
         </el-button>
-      </div>
+      </div> -->
     </el-form>
+    </div>
 
-    <el-dialog title="Or connect with" :visible.sync="showDialog">
-      Can not be simulated on local, so please combine you own business simulation! ! !
-      <br>
-      <br>
-      <br>
-      <social-sign />
-    </el-dialog>
   </div>
 </template>
 
 <script>
 import { validUsername } from '@/utils/validate'
-import SocialSign from './components/SocialSignin'
+// import SocialSign from './components/SocialSignin'
+import md5 from 'js-md5'
 
 export default {
   name: 'Login',
-  components: { SocialSign },
+  // components: { SocialSign },
   data() {
     const validateUsername = (rule, value, callback) => {
       if (!validUsername(value)) {
-        callback(new Error('Please enter the correct user name'))
+        callback(new Error('请输入用户名'))
       } else {
         callback()
       }
     }
     const validatePassword = (rule, value, callback) => {
       if (value.length < 6) {
-        callback(new Error('The password can not be less than 6 digits'))
+        callback(new Error('请输入密码'))
       } else {
         callback()
       }
     }
     return {
       loginForm: {
-        username: 'admin',
-        password: '111111'
+        method: 'login',
+        account: 'ceshi',
+        password: 'zhima888',
+        remember: '1',
+        vcode: ''
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+        account: [{ required: true, trigger: 'blur', validator: validateUsername }],
+        password: [{ required: true, trigger: 'blur', validator: validatePassword }],
+        vcode: [{ required: true, message: '请输入验证码',trigger: 'blur' }]
       },
       passwordType: 'password',
       capsTooltip: false,
@@ -128,6 +154,7 @@ export default {
     // window.addEventListener('storage', this.afterQRScan)
   },
   mounted() {
+    this.getCode()
     if (this.loginForm.username === '') {
       this.$refs.username.focus()
     } else if (this.loginForm.password === '') {
@@ -164,19 +191,28 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
+          this.loginForm.timestamp = +new Date()
+          this.loginForm.sign = md5(
+            this.loginForm.method + this.loginForm.timestamp
+          )
           this.$store.dispatch('user/login', this.loginForm)
             .then(() => {
               this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
               this.loading = false
             })
             .catch(() => {
+              this.getCode()
               this.loading = false
             })
         } else {
-          console.log('error submit!!')
+          console.log('登录失败!!')
           return false
         }
       })
+    },
+    //刷新验证码
+    getCode() {
+      this.$refs.code.src = process.env.VUE_APP_CODE_API + '?' + Math.random()
     },
     getOtherQuery(query) {
       return Object.keys(query).reduce((acc, cur) => {
@@ -223,9 +259,13 @@ $cursor: #fff;
 }
 
 /* reset element-ui css */
+.bg{
+background: url('./bgimg2.jpg') no-repeat ;
+}
 .login-container {
+  background: url('./bgimg2.jpg') no-repeat ;
   .el-input {
-    display: inline-block;
+    // display: inline-block;
     height: 47px;
     width: 85%;
 
@@ -245,6 +285,11 @@ $cursor: #fff;
       }
     }
   }
+  .el-input-group__append {
+    padding: 0;
+    border: none;
+        background: #283443;
+}
 
   .el-form-item {
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -259,6 +304,21 @@ $cursor: #fff;
 $bg:#2d3a4b;
 $dark_gray:#889aa4;
 $light_gray:#eee;
+.login-div{
+  background-color: $bg;
+  width: 50%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    margin: auto;
+width: 500px;
+    height: 390px;
+    border-radius: 30px;
+        border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+}
 
 .login-container {
   min-height: 100%;
@@ -270,7 +330,7 @@ $light_gray:#eee;
     position: relative;
     width: 520px;
     max-width: 100%;
-    padding: 160px 35px 0;
+    padding: 20px 35px 0;
     margin: 0 auto;
     overflow: hidden;
   }
